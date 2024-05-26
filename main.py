@@ -9,14 +9,17 @@ from google.cloud import bigquery
 project_id = "intrepid-period-422622-n5"
 bucket_name = "global-economic-monitor"
 
-def extract_data_from_excel(filename, desired_columns):
-    df = pd.read_excel(filename)
+# Directory containing the Excel files
+data_dir = "data"
+
+def extract_data_from_excel(filepath, desired_columns):
+    df = pd.read_excel(filepath)
     # Select desired columns and potentially filter by year
     data = df[desired_columns]
     return data.to_dict(orient='records')
 
 # Define desired columns (including 'Year')
-desired_columns = ["Year", "Australia", "Germany", "United Kingdom", "Ireland", "Israel", "Japan", "Norway", "Singapore", "United States"]
+desired_columns = ["Year", "Australia", "Germany", "United Kingdom", "Ireland", "Israel", "Japan", "Singapore", "United States"]
 
 # Extract data from each Excel file and create descriptive Parquet filenames
 all_data_by_dataset = {}
@@ -27,7 +30,8 @@ for filename in [
     "Exports Merchandise, Customs, current US$, millions, not seas. adj..xlsx",
     "Exports Merchandise, Customs, current US$, millions, seas. adj..xlsx"
 ]:
-    extracted_data = extract_data_from_excel(filename, desired_columns.copy())
+    filepath = os.path.join(data_dir, filename)
+    extracted_data = extract_data_from_excel(filepath, desired_columns.copy())
     base_name, _ = os.path.splitext(filename)  # Split filename and extension
     new_filename = f"{base_name.lower().replace(' ', '_')}_{file_count}.parquet"
     all_data_by_dataset[new_filename] = extracted_data
@@ -61,7 +65,6 @@ schema = [
     bigquery.SchemaField("Ireland", "FLOAT", mode="NULLABLE"),
     bigquery.SchemaField("Israel", "FLOAT", mode="NULLABLE"),
     bigquery.SchemaField("Japan", "FLOAT", mode="NULLABLE"),
-    bigquery.SchemaField("Norway", "FLOAT", mode="NULLABLE"),
     bigquery.SchemaField("Singapore", "FLOAT", mode="NULLABLE"),
     bigquery.SchemaField("United States", "FLOAT", mode="NULLABLE"),
 ]

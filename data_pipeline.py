@@ -1,14 +1,21 @@
-from prefect import task, Flow
-from prefect.tasks.shell import ShellTask
+from prefect import flow, task
+import subprocess
 
-# Define the task to run the main.py script
-run_main_script = ShellTask(command="python main.py")
+@task
+def run_main_script():
+    # Run the main.py script
+    result = subprocess.run(["python3", "main.py"], capture_output=True, text=True)
+    
+    # Check if the script executed successfully
+    if result.returncode != 0:
+        raise RuntimeError(f"Main script failed with error:\n{result.stderr}")
+    
+    # Print the output for logging
+    print(result.stdout)
 
-# Build the Prefect flow
-with Flow("Global Economic Data Pipeline") as flow:
+@flow
+def main_flow():
     run_main_script()
 
-# Register the flow with Prefect Cloud or run it locally
 if __name__ == "__main__":
-    flow.run()  # Uncomment to run the flow locally
-    # flow.register(project_name="Global Economic Monitoring")  # Register to Prefect Cloud
+    main_flow()
