@@ -1,0 +1,6 @@
+project_id            = "intrepid-period-422622-n5"
+region                = "us-central1"
+bucket_name           = "global-economic-monitor"
+bucket_location       = "US"
+dataset_id            = "global_economic_monitor"
+dataset_location      = "US"
