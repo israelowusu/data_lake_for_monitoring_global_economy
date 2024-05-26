@@ -14,7 +14,7 @@ data_dir = "data"
 
 def extract_data_from_excel(filepath, desired_columns):
     df = pd.read_excel(filepath)
-    # Select desired columns and potentially filter by year
+    # Select desired columns
     data = df[desired_columns]
     return data.to_dict(orient='records')
 
@@ -33,7 +33,7 @@ for filename in [
     filepath = os.path.join(data_dir, filename)
     extracted_data = extract_data_from_excel(filepath, desired_columns.copy())
     base_name, _ = os.path.splitext(filename)  # Split filename and extension
-    new_filename = f"{base_name.lower().replace(' ', '_')}_{file_count}.parquet"
+    new_filename = f"{base_name.lower().replace(' ', '_').replace(',', '').replace('$', 'usd').replace('.', '')}_{file_count}.parquet"
     all_data_by_dataset[new_filename] = extracted_data
     file_count += 1  # Increment counter for filenames
 
@@ -83,7 +83,7 @@ for dataset_name, data in all_data_by_dataset.items():
         uri,
         table_ref,
         job_config=job_config
-    )
+        )
 
     load_job.result()  # Wait for the job to complete
 
