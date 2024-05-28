@@ -164,3 +164,4 @@ GemDataEXTR/
 
 # terraform
 terraform/terraform.tfvars
+grafana-enterprise_11.0.0_amd64.deb
