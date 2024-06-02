@@ -26,7 +26,8 @@ The data pipeline architecture is as follows:
   5. Grafana: Visualize the processed data.
   6. Prefect: Orchestrate the entire pipeline.
 
-![image](https://github.com/israelowusu/data_lake_for_monitoring_global_economy/assets/92272985/4b59133c-0728-430e-ac02-6d539635b8b5)
+![image](https://github.com/israelowusu/data_lake_for_monitoring_global_economy/assets/92272985/0e715373-cac0-4817-ac92-0d795a1b1e7e)
+
 
 
 **Setup and Installation**
